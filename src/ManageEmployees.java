@@ -174,7 +174,7 @@ public class ManageEmployees  {
             salaryField.setLocation(80,250);
             departmentField.setLocation(80,290);
             roleField.setLocation(80,330);
-            getContentPane().setBackground(new Color(136, 0, 255));
+            getContentPane().setBackground(new Color(217, 0, 255));
             setLayout(null);
             setSize(350,500);
 
