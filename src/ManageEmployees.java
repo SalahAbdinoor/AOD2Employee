@@ -42,7 +42,7 @@ public class ManageEmployees  {
         button1.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                JFrame addFrame= new EditWindow();
+                JFrame addFrame= new EditWindow(-1);
 
             }
         });
@@ -61,7 +61,7 @@ public class ManageEmployees  {
         button3.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                JFrame uppdateFrame=new EditWindow();
+                EditWindow uppdateFrame=new EditWindow(table.getSelectedRow());
             }
         });
         frame.add(button3);
@@ -117,7 +117,7 @@ public class ManageEmployees  {
     }
 
     public class EditWindow extends JFrame {
-        public EditWindow() throws HeadlessException {
+        public EditWindow(int selectedRow) throws HeadlessException {
             JLabel addName= new JLabel("Namn");
             JLabel addSurName=new JLabel("Sur Name");
             JLabel addGender=new JLabel("Gender");
@@ -178,6 +178,13 @@ public class ManageEmployees  {
             setLayout(null);
             setSize(350,500);
 
+            if(selectedRow!= -1){
+                Object []row= employeeInfo[selectedRow];
+                System.out.println();
+                namnField.setText((String)row[0]);
+
+            }
+
 
 
             //addFrame.setDefaultCloseOperation(addFrame.EXIT_ON_CLOSE);
@@ -201,7 +208,38 @@ public class ManageEmployees  {
 
             setVisible(true);
             buttonSave= new JButton("Save");
+            buttonSave.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    Object[]newTabelRow={namnField.getText(),surNameField.getText(),genderField.getText(),birthDateField.getText(),
+                    telNoField.getText(),salaryField.getText(),departmentField.getText(),roleField.getText()};
+                    if(selectedRow== -1){
+                        int oldArraylength=employeeInfo.length;
+                        Object[][]newEmployeeInfo= new Object[oldArraylength +1][];
+                        for(int i=0; i<oldArraylength; i++){
+                            newEmployeeInfo[i]= employeeInfo[i];
+                        }
+                        newEmployeeInfo[oldArraylength]=newTabelRow;
+                        employeeInfo=newEmployeeInfo;
+                    }else {
+                        employeeInfo[selectedRow]=newTabelRow;
+                    }
+                    tabelmodel=new DefaultTableModel(employeeInfo,columnnames);
+                    table.setModel(tabelmodel);
+                    dispose();
+
+                }
+            });
             buttonCancel=new JButton("Cancel");
+            buttonCancel.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    tabelmodel=new DefaultTableModel(employeeInfo,columnnames);
+                    table.setModel(tabelmodel);
+                    dispose();
+
+                }
+            });
             buttonSave.setSize(80,30);
             buttonSave.setLocation(40,400);
             buttonCancel.setSize(80,30);
